@@ -142,22 +142,9 @@ const login = async () => {
       text-align: center;
       color: #fff;
     }
-  }
 
-  :deep(.el-form) {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-
-    :deep(.el-form-item) {
-      margin-bottom: 0px;
-    }
-
-    .btn_item :deep(.el-form-item__content) {
-      justify-content: center;
-    }
-
-    .btn_item :deep(.el-button) {
+    :deep(.el-button) {
+      margin-top: 10px;
       width: 100%;
       background-color: var(--el-button-hover-bg-color);
       border-color: var(--el-button-hover-border-color);
