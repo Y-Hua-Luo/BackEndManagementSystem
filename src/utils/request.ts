@@ -11,7 +11,7 @@ const service = axios.create({
   },
 })
 
-// 添加请求 / 响应拦截器
+// 请求拦截器
 service.interceptors.request.use(
   (config) => {
     // 配置请求头
@@ -28,6 +28,7 @@ service.interceptors.request.use(
   },
 )
 
+// 响应拦截器
 service.interceptors.response.use(
   // 成功回调
   (response) => {

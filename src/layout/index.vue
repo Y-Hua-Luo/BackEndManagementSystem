@@ -5,7 +5,7 @@
       <LOGO />
       <!-- 菜单区: 超出屏幕范围显示滚动条 -->
       <el-scrollbar class="scrollbar">
-        <!-- 菜单栏: router: 自动以el-menu-item的index作为路由跳转路径,  -->
+        <!-- 菜单栏: router:true自动以el-menu-item的index作为路由跳转路径,  -->
         <el-menu
           :collapse="layoutSettingsStore.isLayoutMenuFold"
           :default-active="$route.path"
@@ -32,15 +32,18 @@
 </template>
 
 <script setup lang="ts">
-// 封装的logo组件
+// 封装的布局组件
 import LOGO from '@/layout/logo/index.vue'
 import MENU from '@/layout/menu/index.vue'
-import useUserStore from '@/stores/modules/user'
 import Content from '@/layout/content/index.vue'
 import Tabbar from '@/layout/tabbar/index.vue'
+// user仓库
+import useUserStore from '@/stores/modules/user'
+// 路由实例
 import { useRoute } from 'vue-router'
-
+// layoutSetting仓库
 import useLayoutSettingsStore from '@/stores/modules/layoutSetting.ts'
+
 const layoutSettingsStore = useLayoutSettingsStore()
 const userStore = useUserStore()
 
@@ -88,7 +91,7 @@ const $route = useRoute()
   .layout_main {
     display: flex;
     flex-direction: column;
-    padding: 0 5px;
+    padding: 0 20px 0 10px;
     width: 100%;
     height: 100vh;
 
@@ -99,6 +102,7 @@ const $route = useRoute()
 
     .content {
       flex: 1;
+      margin-top: 10px;
     }
   }
 }
