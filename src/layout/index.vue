@@ -58,7 +58,7 @@ const $route = useRoute()
   height: 100vh;
 
   .layout_slider {
-    padding: 0px 20px;
+    padding: 0 20px;
     width: $base-menu-width;
     flex-shrink: 0;
     background-color: $base-menu-bgColor;

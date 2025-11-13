@@ -1,6 +1,9 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-const service = axios.create({
+import useUserStore from '@/stores/modules/user.ts'
+
+// 创建axios实例
+const request = axios.create({
   // 基础路径：由环境变量提供
   baseURL: import.meta.env.VITE_APP_BASE_API,
   // 超时时间
@@ -11,13 +14,14 @@ const service = axios.create({
   },
 })
 
-// 请求拦截器
-service.interceptors.request.use(
+// 添加请求拦截器
+request.interceptors.request.use(
   (config) => {
-    // 配置请求头
-    const token = localStorage.getItem('token')
+    // 配置请求头token
+    const userStore = useUserStore()
+    const { token } = userStore
     if (token) {
-      config.headers.token = `${token}`
+      config.headers.token = token
     }
     // 返回配置对象
     return config
@@ -28,8 +32,8 @@ service.interceptors.request.use(
   },
 )
 
-// 响应拦截器
-service.interceptors.response.use(
+// 添加响应拦截器
+request.interceptors.response.use(
   // 成功回调
   (response) => {
     // 简化一次.data
@@ -66,35 +70,4 @@ service.interceptors.response.use(
   },
 )
 
-export const request = {
-  get(url: string, params = {}) {
-    return service({
-      url,
-      method: 'get',
-      params,
-    })
-  },
-  post(url: string, data = {}) {
-    return service({
-      url,
-      method: 'post',
-      data,
-    })
-  },
-  put(url: string, data = {}) {
-    return service({
-      url,
-      method: 'put',
-      data,
-    })
-  },
-  delete(url: string, params = {}) {
-    return service({
-      url,
-      method: 'delete',
-      params,
-    })
-  },
-}
-
-export default service
+export default request
