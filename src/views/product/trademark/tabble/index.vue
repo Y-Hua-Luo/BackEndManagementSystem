@@ -25,11 +25,12 @@
 
 <script setup lang="ts">
 import { reqTradeMark } from '@/api/product/trademark'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import type { TradeMark } from '@/api/product/trademark/type.ts'
 
 const props = defineProps(['currentPage', 'limit'])
-const emits = defineEmits(['total-change'])
+
+const totalModel = defineModel<number>('total')
 
 // 用于拼接图片url
 const VITE_APP_BASE_API = import.meta.env.VITE_APP_BASE_API
@@ -42,13 +43,23 @@ const getTradeMark = async (page: number, limit: number) => {
   // 获取成功存储品牌信息 + 修改父组件total值
   if (result.code == 200) {
     tradeMarkArr.value = result.data.records
-    emits('total-change', result.data.total)
+    totalModel.value = result.data.total
   }
 }
 
+// 初始化时获取数据
 onMounted(async () => {
   getTradeMark(props.currentPage, props.limit)
 })
+
+// 监听分页参数变化，重新获取数据
+watch(
+  () => [props.currentPage, props.limit],
+  ([newPage, newLimit]) => {
+    getTradeMark(newPage, newLimit)
+  },
+  { immediate: false },
+)
 </script>
 
 <style scoped lang="scss"></style>
