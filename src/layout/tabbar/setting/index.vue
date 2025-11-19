@@ -2,6 +2,7 @@
   <el-button icon="RefreshLeft" circle @click="updateRefresh" />
   <el-button icon="FullScreen" circle @click="toggleFullScreen" />
   <el-button icon="Setting" circle />
+  <!-- 用户头像 -->
   <img :src="userStore.avatar" alt="" />
   <el-dropdown>
     <span class="el-dropdown-link">

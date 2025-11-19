@@ -7,8 +7,8 @@ export interface ResponseData {
 
 // 品牌信息
 export interface TradeMark {
-  createTime: string
-  updateTime: string
+  createTime?: string
+  updateTime?: string
   id?: number
   tmName: string
   logoUrl: string

@@ -1,7 +1,7 @@
 <template>
   <ElConfigProvider :locale="zhCn">
     <!-- layout: 分页器内容, 排列顺序同书写顺序, ->右侧的内容居右显示 -->
-    <!-- :current-page和:page-size必须为双向绑定时才会显示分页器,如v-model或者使用自定义事件双向绑定  -->
+    <!-- :current-page和:page-size必须为双向绑定时才会显示分页器, 如v-model或者使用自定义事件双向绑定  -->
     <el-pagination
       v-model:current-page="currentPageModel"
       v-model:page-size="limitModel"

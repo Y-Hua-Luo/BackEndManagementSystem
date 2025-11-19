@@ -60,9 +60,8 @@ const $route = useRoute()
   .layout_slider {
     padding: 0 20px;
     width: $base-menu-width;
-    flex-shrink: 0;
     background-color: $base-menu-bgColor;
-    transition: width 0.5s;
+    transition: all 0.5s;
 
     &.fold {
       width: 100px;
@@ -92,7 +91,8 @@ const $route = useRoute()
     display: flex;
     flex-direction: column;
     padding: 0 20px 0 10px;
-    width: 100%;
+    flex: 1;
+    min-width: 0;
     height: 100vh;
 
     .tabbar {
