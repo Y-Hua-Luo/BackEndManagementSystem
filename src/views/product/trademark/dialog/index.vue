@@ -1,9 +1,14 @@
 <template>
   <el-dialog v-model="dialogVisible" title="添加品牌">
-    <el-form-item label="品牌名称" label-width="80px" style="width: 70%">
+    <el-form-item
+      :rules="{ required: true }"
+      label="品牌名称"
+      label-width="90px"
+      style="width: 70%"
+    >
       <el-input v-model="tradeMarkParams.tmName" placeholder="请输入品牌名称" />
     </el-form-item>
-    <el-form-item label="品牌LOGO" label-width="80px">
+    <el-form-item :rules="{ required: true }" label="品牌LOGO" label-width="90px">
       <el-upload
         class="avatar-uploader"
         action="http://127.0.0.1:10086/admin/product/fileUpload"
@@ -25,20 +30,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import useUserStore from '@/stores/modules/user.ts'
-import { errorMessage, successMessage } from '@/utils/notification'
+import { errorMessage } from '@/utils/notification'
 import type { UploadProps } from 'element-plus'
-import { reqAddOrUpdateTradeMark } from '@/api/product/trademark'
+import useTradeMarkStore from '@/stores/modules/tradeMark'
+import { storeToRefs } from 'pinia'
 
-const emits = defineEmits(['updateTabbleData'])
-
-const dialogVisible = defineModel<boolean>('modelValue', { default: false })
-
-const tradeMarkParams = ref({
-  tmName: '',
-  logoUrl: '',
-})
+const tradeMarkStore = useTradeMarkStore()
+const { dialogVisible, tradeMarkParams } = storeToRefs(tradeMarkStore)
 
 // 获取用户token
 const userStore = useUserStore()
@@ -47,36 +47,6 @@ const uploadHeaders = computed(() => {
     token: userStore.token,
   }
 })
-
-// 确认按钮点击事件
-const confirm = async () => {
-  // 判断产品名称和图片是否已有
-  if (tradeMarkParams.value.tmName === '' || tradeMarkParams.value.logoUrl === '') {
-    errorMessage('产品名称和图片不能为空')
-    return
-  }
-  // 发送请求
-  const result = await reqAddOrUpdateTradeMark(tradeMarkParams.value)
-  if (result.code === 200) {
-    successMessage('添加成功')
-    // 清空对话框数据
-    tradeMarkParams.value.tmName = ''
-    tradeMarkParams.value.logoUrl = ''
-    // 关闭对话框
-    dialogVisible.value = false
-    // 更新产品列表数据
-    emits('updateTabbleData')
-  }
-}
-
-// 取消按钮点击事件
-const cancle = () => {
-  // 清空对话框数据
-  tradeMarkParams.value.tmName = ''
-  tradeMarkParams.value.logoUrl = ''
-  // 关闭对话框
-  dialogVisible.value = false
-}
 
 // 图片上传前验证
 const beforePictureUpload: UploadProps['beforeUpload'] = (rawFile) => {
@@ -107,6 +77,26 @@ const handlePictureUploadSuccess: UploadProps['onSuccess'] = (response) => {
   } else {
     errorMessage(`上传失败: ${response}`)
   }
+}
+
+// 确认按钮点击事件
+const confirm = async () => {
+  // 判断产品名称和图片是否已有
+  if (tradeMarkParams.value.tmName === '' || tradeMarkParams.value.logoUrl === '') {
+    errorMessage('产品名称和图片不能为空')
+    return
+  }
+  // 发送添加产品请求
+  tradeMarkStore.addTradeMark()
+}
+
+// 取消按钮点击事件
+const cancle = () => {
+  // 清空对话框数据
+  tradeMarkParams.value.tmName = ''
+  tradeMarkParams.value.logoUrl = ''
+  // 关闭对话框
+  tradeMarkStore.closeDialog()
 }
 </script>
 

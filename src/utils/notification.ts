@@ -33,3 +33,11 @@ export const errorMessage = (message: string) => {
     type: 'error',
   })
 }
+
+// info提示
+export const infoMessage = (message: string) => {
+  ElMessage({
+    message,
+    type: 'info',
+  })
+}

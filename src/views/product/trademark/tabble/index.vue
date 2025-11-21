@@ -1,5 +1,5 @@
 <template>
-  <el-table border style="margin: 15px 0" :data="tradeMarkArr">
+  <el-table border style="margin: 15px 0" :data="tradeMarkList">
     <el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
     <el-table-column label="品牌名称">
       <!--   作用域插槽: row:data数据的每一项     -->
@@ -16,28 +16,26 @@
 
     <el-table-column label="品牌操作">
       <template v-slot="{ row }">
-        <el-button type="warning" icon="Edit" @click="updateTradeMark" />
-        <el-button type="danger" icon="Delete" />
+        <el-button type="warning" icon="Edit" @click="updateTradeMark(row)" />
+        <el-button type="danger" icon="Delete" @click="deleteTradeMark(row)" />
       </template>
     </el-table-column>
   </el-table>
 </template>
 
 <script setup lang="ts">
-import { reqTradeMark } from '@/api/product/trademark'
-import { onMounted, ref, watch } from 'vue'
 import type { TradeMark } from '@/api/product/trademark/type.ts'
+import { watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import useTradeMarkStore from '@/stores/modules/tradeMark'
+import { ElMessageBox } from 'element-plus'
+import { infoMessage } from '@/utils/notification'
 
-const props = defineProps<{ currentPage: number; limit: number }>()
-// 总数据量: 由父组件提供给子表格组件和分页器组件使用
-const totalModel = defineModel<number>('total')
-// 控制 添加品牌dialog 显示/隐藏
-const dialogVisible = defineModel<boolean>('modelValue', { default: false })
+const tradeMarkStore = useTradeMarkStore()
+const { currentPage, limit, tradeMarkList, tradeMarkParams } = storeToRefs(tradeMarkStore)
 
 // 用于拼接图片url
 const VITE_APP_BASE_API = import.meta.env.VITE_APP_BASE_API
-// 存储获取到的品牌信息
-const tradeMarkArr = ref<TradeMark[]>([])
 
 // 处理图片URL，确保能正确显示
 const getImageUrl = (logoUrl: string) => {
@@ -46,38 +44,36 @@ const getImageUrl = (logoUrl: string) => {
   return logoUrl.startsWith('http') ? logoUrl : `${VITE_APP_BASE_API}${logoUrl}`
 }
 
-// 获取所有品牌信息(默认第一页)
-const getTradeMark = async (page = 1) => {
-  const result = await reqTradeMark(page, props.limit)
-  // 获取成功存储品牌信息 + 修改父组件total值
-  if (result.code == 200) {
-    tradeMarkArr.value = result.data.records
-    totalModel.value = result.data.total
-  }
-}
-
-// 暴露getTradeMark方法给父组件使用
-defineExpose({
-  getTradeMark,
-})
-
-// 初始化时获取数据
-onMounted(async () => {
-  getTradeMark(props.currentPage)
-})
-
 // 监听分页参数变化，重新获取数据
 watch(
-  () => [props.currentPage, props.limit],
-  ([newPage]) => {
-    getTradeMark(newPage as number)
+  [currentPage, limit],
+  ([newPage, newLimit]) => {
+    tradeMarkStore.getTradeMark(newPage as number, newLimit as number)
   },
-  { immediate: false },
+  { immediate: true },
 )
 
 // 编辑品牌按钮点击事件
-const updateTradeMark = () => {
-  dialogVisible.value = true
+const updateTradeMark = (row: TradeMark) => {
+  tradeMarkParams.value.id = row.id ? row.id : undefined
+  tradeMarkParams.value.tmName = row.tmName
+  tradeMarkParams.value.logoUrl = row.logoUrl
+  tradeMarkStore.openDialog()
+}
+
+// 删除品牌按钮点击事件
+const deleteTradeMark = (row: TradeMark) => {
+  ElMessageBox.confirm(`确定要删除\'${row.tmName}\'的品牌信息吗？`, '确认删除', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'error',
+  })
+    .then(() => {
+      tradeMarkStore.deleteTradeMark(row.id as number)
+    })
+    .catch(() => {
+      infoMessage('取消删除')
+    })
 }
 </script>
 
