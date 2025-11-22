@@ -9,7 +9,7 @@ enum API {
   ADD_TRADEMARK_URL = '/admin/product/baseTrademark/save',
   // 修改品牌
   UPDATE_TRADEMARK_URL = '/admin/product/baseTrademark/update',
-  // 删除品牌
+  // 删除品牌，需拼接品牌id
   DELETE_TRADEMARK_URL = '/admin/product/baseTrademark/remove',
 }
 

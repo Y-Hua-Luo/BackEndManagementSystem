@@ -1,14 +1,9 @@
+import type { ResponseData } from '../type'
+
 // 登录用到的表单数据类型
 export interface loginFormData {
   username: string
   password: string
-}
-
-// 全部接口返回的数据类型公共属性部分
-export interface ResponseData {
-  code: number
-  message: string
-  ok: boolean
 }
 
 // 登录 / 退出登录 后返回的数据类型

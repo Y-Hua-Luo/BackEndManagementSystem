@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="dialogVisible" title="添加品牌">
+  <el-dialog v-model="dialogVisible" :title="tradeMarkParams.id ? '修改品牌' : '添加品牌'">
     <el-form-item
       :rules="{ required: true }"
       label="品牌名称"
@@ -92,9 +92,6 @@ const confirm = async () => {
 
 // 取消按钮点击事件
 const cancle = () => {
-  // 清空对话框数据
-  tradeMarkParams.value.tmName = ''
-  tradeMarkParams.value.logoUrl = ''
   // 关闭对话框
   tradeMarkStore.closeDialog()
 }

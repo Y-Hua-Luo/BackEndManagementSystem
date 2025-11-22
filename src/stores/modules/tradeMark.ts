@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { reqAddOrUpdateTradeMark, reqDeleteTradeMark, reqTradeMark } from '@/api/product/trademark'
 import type { TradeMark } from '@/api/product/trademark/type'
 import { errorMessage, successMessage } from '@/utils/notification'
@@ -20,6 +20,39 @@ const useTradeMarkStore = defineStore('TradeMark', () => {
     id: undefined,
     tmName: '',
     logoUrl: '',
+  })
+
+  // 动态获取完整logoUrl
+  const fullLogoUrl = computed(() => {
+    if (!tradeMarkParams.value.logoUrl) return ''
+    if (tradeMarkParams.value.logoUrl.startsWith('http')) {
+      return
+    }
+    return import.meta.env.VITE_APP_BASE_API + tradeMarkParams.value.logoUrl
+  })
+
+  // 同步完整logoUrl到tradeMarkParams
+  watch(fullLogoUrl, (newVal, oldVal) => {
+    // 只有新旧值不一样时才进行同步
+    if (newVal && newVal !== oldVal) {
+      tradeMarkParams.value.logoUrl = newVal
+    }
+  })
+
+  // 重置tradeMarkParams数据
+  const resetTradeMarkParams = () => {
+    tradeMarkParams.value = {
+      id: undefined,
+      tmName: '',
+      logoUrl: '',
+    }
+  }
+
+  // 监听dialogVisible变化，从true变为false时清空对话框数据
+  watch(dialogVisible, (newVal, oldVal) => {
+    if (!newVal && oldVal) {
+      resetTradeMarkParams()
+    }
   })
 
   // 设置当前页码

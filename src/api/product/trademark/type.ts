@@ -1,9 +1,4 @@
-// 全部接口返回的数据类型公共属性部分
-export interface ResponseData {
-  code: number
-  message: string
-  ok: boolean
-}
+import type { ResponseData } from '@/api/type'
 
 // 品牌信息
 export interface TradeMark {
