@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import Tabble from './tabble/index.vue'
+import Tabble from './table/index.vue'
 import Pagination from './pagination/index.vue'
 import Dialog from './dialog/index.vue'
 import useTradeMarkStore from '@/stores/modules/tradeMark'
