@@ -13,7 +13,8 @@ import useUserStore from '@/stores/modules/user'
 import { getTime } from '@/utils/time'
 import { storeToRefs } from 'pinia'
 
-const { avatar, userName } = storeToRefs(useUserStore())
+const userStore = useUserStore()
+const { avatar, userName } = storeToRefs(userStore)
 const time = getTime()
 </script>
 

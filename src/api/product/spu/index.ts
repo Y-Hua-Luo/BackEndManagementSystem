@@ -1,6 +1,7 @@
 import request from '@/utils/request'
 import type { SpuListData } from './type'
 
+// SPU管理相关API
 enum API {
   // 获取销售列表
   GET_SPU_LIST_URL = '/admin/product/spuInfo',

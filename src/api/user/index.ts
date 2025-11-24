@@ -3,8 +3,11 @@ import type { loginFormData, loginResponseData, userResponseData } from './type'
 
 // 用户相关的API
 enum API {
+  // 登录
   LOGIN_URL = '/admin/acl/index/login',
+  // 获取用户信息
   USERINFO_URL = '/admin/acl/index/info',
+  // 登出
   LOGOUT_URL = '/admin/acl/index/logout',
 }
 
