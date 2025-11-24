@@ -10,14 +10,14 @@
 
     <el-table-column label="品牌LOGO">
       <template v-slot="{ row }">
-        <img :src="getImageUrl(row.logoUrl)" alt="" style="width: 80px; height: 80px" />
+        <img :src="getImageUrl(row.logoUrl)" alt="" style="width: 60px; height: 60px" />
       </template>
     </el-table-column>
 
     <el-table-column label="品牌操作">
       <template v-slot="{ row }">
-        <el-button type="warning" icon="Edit" @click="updateTradeMark(row)" />
-        <el-button type="danger" icon="Delete" @click="deleteTradeMark(row)" />
+        <el-button type="warning" size="small" icon="Edit" @click="updateTradeMark(row)" />
+        <el-button type="danger" size="small" icon="Delete" @click="deleteTradeMark(row)" />
       </template>
     </el-table-column>
   </el-table>

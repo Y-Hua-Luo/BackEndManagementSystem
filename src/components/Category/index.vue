@@ -24,12 +24,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="三级分类">
-        <el-select
-          v-model="selectedC3Id"
-          placeholder="请选择"
-          style="width: 200px"
-          @change="categoryStore.getAttrInfoList()"
-        >
+        <el-select v-model="selectedC3Id" placeholder="请选择" style="width: 200px">
           <el-option v-for="c3 in c3Arr" :key="c3.id" :label="c3.name" :value="c3.id" />
         </el-select>
       </el-form-item>
