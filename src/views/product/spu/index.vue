@@ -1,7 +1,21 @@
 <template>
-  <div>SPU管理</div>
+  <div>
+    <!-- 分类栏 -->
+    <el-card>
+      <Classfication />
+    </el-card>
+
+    <el-card style="margin: 10px 0">
+      <!-- 三级分类没选时添加属性按钮禁用 -->
+      <el-button type="primary" icon="Plus">添加Spu</el-button>
+      <Table />
+    </el-card>
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Classfication from '../../../components/Category/index.vue'
+import Table from './table/index.vue'
+</script>
 
 <style scoped lang="scss"></style>

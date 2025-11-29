@@ -9,6 +9,7 @@ import 'element-plus/dist/index.css'
 import 'virtual:svg-icons-register'
 
 import App from './App.vue'
+import Classfication from '@/components/Category/index.vue'
 
 // 导入路由鉴权文件
 import router from './permission.ts'
@@ -20,6 +21,9 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
+
+// 全局注册分类选择组件
+app.component('Classfication', Classfication)
 
 app.use(pinia)
 app.use(router)

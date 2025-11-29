@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 分类栏 -->
     <el-card>
       <Classfication />
     </el-card>
@@ -79,7 +80,7 @@ import Classfication from '../../../components/Category/index.vue'
 import Table from './table/index.vue'
 import useCategoryStore from '@/stores/modules/category'
 import { storeToRefs } from 'pinia'
-import { onMounted, ref } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
 import { errorMessage, successMessage } from '@/utils/notification'
 import { reqAddOrUpdateAttr } from '@/api/product/attr'
 
@@ -88,18 +89,17 @@ const { selectedC3Id } = storeToRefs(categoryStore)
 // 表格组件实例
 const tableRef = ref()
 
+// 组件卸载时清空仓库数据
+onBeforeUnmount(() => {
+  categoryStore.reset()
+})
+
 // 自定义指令，input自动获焦点
 const vInputFocus = {
   mounted: (el: any) => {
     el.querySelector('input').focus()
   },
 }
-
-// 组件挂载时如果有三级分类id则获取数据
-onMounted(() => {
-  // 更新表格数据
-  tableRef.value.getAttrInfoList()
-})
 
 // 添加/修改属性时收集的数据
 const attrParams = ref<AttrInfo>({

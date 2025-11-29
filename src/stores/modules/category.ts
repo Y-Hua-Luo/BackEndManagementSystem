@@ -45,6 +45,16 @@ const useCategoryStore = defineStore('Category', () => {
     }
   }
 
+  // 清空仓库数据
+  const reset = () => {
+    selectedC1Id.value = undefined
+    selectedC2Id.value = undefined
+    selectedC3Id.value = undefined
+    c1Arr.value = undefined
+    c2Arr.value = undefined
+    c3Arr.value = undefined
+  }
+
   return {
     c1Arr,
     selectedC1Id,
@@ -55,6 +65,7 @@ const useCategoryStore = defineStore('Category', () => {
     getC1,
     getC2,
     getC3,
+    reset,
   }
 })
 
