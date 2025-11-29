@@ -12,7 +12,7 @@ enum API {
   // 获取所选分类的属性和属性值，需拼接c1id,c2id,c3id
   ATTR_INFO_URL = '/admin/product/attrInfoList',
   // 新增属性 / 修改属性
-  ADD_OR_UPDATE_ATTR_URL = '/admin/product/attrInfo',
+  ADD_OR_UPDATE_ATTR_URL = '/admin/product/saveAttrInfo',
   // 删除属性，需拼接attrId
   DELETE_ATTR_URL = '/admin/product/deleteAttr',
 }
