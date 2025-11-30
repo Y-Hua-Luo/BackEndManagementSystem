@@ -11,9 +11,13 @@
     <el-table-column label="属性值" prop="attrValue">
       <template v-slot="{ row }">
         <div style="display: flex; gap: 4px; flex-wrap: wrap">
-          <el-tag type="primary" v-for="v in row.attrValueList" :key="v.id">{{
-            v.valueName
-          }}</el-tag>
+          <el-tag
+            style="transition: none"
+            type="primary"
+            v-for="v in row.attrValueList"
+            :key="v.id"
+            >{{ v.valueName }}</el-tag
+          >
         </div>
       </template>
     </el-table-column>
