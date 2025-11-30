@@ -2,7 +2,7 @@
   <div>
     <!-- 分类栏 -->
     <el-card>
-      <Classfication />
+      <Category />
     </el-card>
 
     <!-- 属性列表 -->
@@ -28,7 +28,6 @@
 
 <script setup lang="ts">
 import type { AttrInfo } from '@/api/product/attr/type'
-import Classfication from '../../../components/Category/index.vue'
 import Table from './table/index.vue'
 import useCategoryStore from '@/stores/modules/category'
 import { storeToRefs } from 'pinia'

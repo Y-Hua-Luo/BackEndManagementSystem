@@ -7,25 +7,17 @@ import '@/styles/index.scss'
 import 'element-plus/dist/index.css'
 // svg注册script
 import 'virtual:svg-icons-register'
-
+// 引入全局注册组件
+import globalComponents from './components'
 import App from './App.vue'
-import Classfication from '@/components/Category/index.vue'
-
 // 导入路由鉴权文件
 import router from './permission.ts'
 
 const app = createApp(App)
 
-// 全局导入全部elementPlus组件库的icon图标
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  app.component(key, component)
-}
-
-// 全局注册分类选择组件
-app.component('Classfication', Classfication)
-
 app.use(pinia)
 app.use(router)
+// 使用全局注册组件
+app.use(globalComponents)
 
 app.mount('#app')
