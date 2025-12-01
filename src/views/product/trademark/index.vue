@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import Tabble from './table/index.vue'
-import Pagination from './pagination/index.vue'
+import Pagination from '../../../components/Pagination/index.vue'
 import Dialog from './dialog/index.vue'
 import useTradeMarkStore from '@/stores/modules/tradeMark'
 
