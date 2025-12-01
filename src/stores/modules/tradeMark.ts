@@ -1,9 +1,8 @@
-import { defineStore, storeToRefs } from 'pinia'
+import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
 import { reqAddOrUpdateTradeMark, reqDeleteTradeMark, reqTradeMark } from '@/api/product/trademark'
 import type { TradeMark } from '@/api/product/trademark/type'
 import { errorMessage, successMessage } from '@/utils/notification'
-import usePaginationStore from './pagination'
 
 const useTradeMarkStore = defineStore('TradeMark', () => {
   // 添加/编辑品牌弹窗显隐
@@ -16,9 +15,6 @@ const useTradeMarkStore = defineStore('TradeMark', () => {
     tmName: '',
     logoUrl: '',
   })
-
-  const paginationStore = usePaginationStore()
-  const { currentPage, limit } = storeToRefs(paginationStore)
 
   // 动态获取完整logoUrl
   const fullLogoUrl = computed(() => {
@@ -64,20 +60,19 @@ const useTradeMarkStore = defineStore('TradeMark', () => {
   }
 
   // 获取品牌列表
-  const getTradeMark = async (page?: number, pageSize?: number) => {
-    const targetPage = page ?? currentPage.value
-    const targetSize = pageSize ?? limit.value
-    const result = await reqTradeMark(targetPage, targetSize)
+  const getTradeMark = async (page: number, pageSize: number) => {
+    const result = await reqTradeMark(page, pageSize)
     if (result.code === 200) {
       tradeMarkList.value = result.data.records
-      paginationStore.setTotal(result.data.total)
+      return result.data.total
     } else {
       errorMessage(result.message)
+      return undefined
     }
   }
 
   // 添加品牌 / 更新品牌
-  const addTradeMark = async () => {
+  const addTradeMark = async (page: number, pageSize: number) => {
     const result = await reqAddOrUpdateTradeMark(tradeMarkParams.value)
     if (result.code === 200) {
       if (tradeMarkParams.value.id) {
@@ -91,27 +86,29 @@ const useTradeMarkStore = defineStore('TradeMark', () => {
       // 关闭对话框
       closeDialog()
       // 更新产品列表数据
-      getTradeMark()
+      const total = await getTradeMark(page, pageSize)
+      return total
     } else {
       errorMessage(result.message)
+      return undefined
     }
   }
 
   // 删除品牌
-  const deleteTradeMark = async (id: number) => {
+  const deleteTradeMark = async (id: number, page: number, pageSize: number) => {
     const result = await reqDeleteTradeMark(id)
     if (result.code === 200) {
       successMessage('删除成功')
       // 更新产品列表数据
-      getTradeMark()
+      const total = await getTradeMark(page, pageSize)
+      return total
     } else {
       errorMessage(result.message)
+      return undefined
     }
   }
 
   return {
-    currentPage,
-    limit,
     dialogVisible,
     tradeMarkList,
     openDialog,

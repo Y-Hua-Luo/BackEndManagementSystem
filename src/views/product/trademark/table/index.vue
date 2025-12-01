@@ -30,9 +30,12 @@ import { storeToRefs } from 'pinia'
 import useTradeMarkStore from '@/stores/modules/tradeMark'
 import { ElMessageBox } from 'element-plus'
 import { infoMessage } from '@/utils/notification'
+import usePaginationStore from '@/stores/modules/pagination'
 
 const tradeMarkStore = useTradeMarkStore()
-const { currentPage, limit, tradeMarkList, tradeMarkParams } = storeToRefs(tradeMarkStore)
+const paginationStore = usePaginationStore()
+const { currentPage, limit } = storeToRefs(paginationStore)
+const { tradeMarkList, tradeMarkParams } = storeToRefs(tradeMarkStore)
 
 // 用于拼接图片url
 const VITE_APP_BASE_API = import.meta.env.VITE_APP_BASE_API
@@ -47,8 +50,11 @@ const getImageUrl = (logoUrl: string) => {
 // 监听分页参数变化，重新获取数据
 watch(
   [currentPage, limit],
-  ([newPage, newLimit]) => {
-    tradeMarkStore.getTradeMark(newPage as number, newLimit as number)
+  async ([newPage, newLimit]) => {
+    const total = await tradeMarkStore.getTradeMark(newPage as number, newLimit as number)
+    if (typeof total === 'number') {
+      paginationStore.setTotal(total)
+    }
   },
   { immediate: true },
 )
@@ -68,8 +74,15 @@ const deleteTradeMark = (row: TradeMark) => {
     cancelButtonText: '取消',
     type: 'error',
   })
-    .then(() => {
-      tradeMarkStore.deleteTradeMark(row.id as number)
+    .then(async () => {
+      const total = await tradeMarkStore.deleteTradeMark(
+        row.id as number,
+        currentPage.value,
+        limit.value,
+      )
+      if (typeof total === 'number') {
+        paginationStore.setTotal(total)
+      }
     })
     .catch(() => {
       infoMessage('取消删除')

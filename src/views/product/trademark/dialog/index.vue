@@ -36,9 +36,13 @@ import { errorMessage } from '@/utils/notification'
 import type { UploadProps } from 'element-plus'
 import useTradeMarkStore from '@/stores/modules/tradeMark'
 import { storeToRefs } from 'pinia'
+import usePaginationStore from '@/stores/modules/pagination'
 
 const tradeMarkStore = useTradeMarkStore()
 const { dialogVisible, tradeMarkParams } = storeToRefs(tradeMarkStore)
+
+const paginationStore = usePaginationStore()
+const { currentPage, limit } = storeToRefs(paginationStore)
 
 // 获取用户token
 const userStore = useUserStore()
@@ -87,7 +91,10 @@ const confirm = async () => {
     return
   }
   // 发送添加产品请求
-  tradeMarkStore.addTradeMark()
+  const total = await tradeMarkStore.addTradeMark(currentPage.value, limit.value)
+  if (typeof total === 'number') {
+    paginationStore.setTotal(total)
+  }
 }
 
 // 取消按钮点击事件
